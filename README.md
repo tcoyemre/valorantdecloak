@@ -59,7 +59,7 @@ Clicking "Skins" on a player opens their in-match loadout:
 1) Download [Microsoft Visual C++ Libraries](https://github.com/abbodi1406/vcredist/releases)
 2) Download the [release](https://github.com/tcoyemre/valorantdecloak/releases/latest).
 3) Extract **all** files.
-4) Optionally, put your own HenrikDEV API key in `config.json`.
+4) Put your own HenrikDEV API key in `config.json` (if you don't put u cant see stats and names).
 5) Run `Decloak.exe`.
 
 ### Running from source:
