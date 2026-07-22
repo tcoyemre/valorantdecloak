@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valorant Decloak — ÖNİZLEME (grup rozetleri)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=13" />
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">VALORANT</span><span class="brand-accent">DECLOAK</span>
+    </div>
+    <div class="topbar-right">
+      <div class="status-pill">
+        <span id="status-dot" class="dot"></span>
+        <span id="status-text">Bağlanıyor...</span>
+      </div>
+      <button id="quit-btn" class="quit" title="Kapat">✕</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="hero" class="hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-frame" aria-hidden="true"></div>
+      <div class="hero-content">
+        <span id="state-badge" class="state-badge">Yükleniyor</span>
+        <h1 id="map-name" class="map-name">Valorant Decloak</h1>
+        <div id="mode-name" class="mode-name"></div>
+      </div>
+    </section>
+
+    <div id="teams" class="teams">
+      <div class="placeholder">
+        <div class="spinner"></div>
+        <p>Yükleniyor...</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <span id="lan-info" class="lan-info"></span>
+    ÖNİZLEME — sahte veri • Valorant Decloak by <a href="https://x.com/tcoyvl" target="_blank" rel="noopener" class="cred">tcoy</a>
+  </footer>
+  <div id="toast" class="toast"></div>
+  <div id="skins-modal" class="skins-modal" aria-hidden="true"></div>
+
+  <div id="lang-switch" class="lang-switch" role="group" aria-label="Language / Dil">
+    <button type="button" class="lang-opt" data-lang="tr">TR</button>
+    <button type="button" class="lang-opt" data-lang="en">EN</button>
+  </div>
+
+  <!-- ÖNİZLEME: gerçek /data ve /info uçları yerine sahte veri döndür.
+       Böylece gerçek app.js + style.css ile birebir aynı görünür. -->
+  <script>
+    // Grup (premade) dağılımı:
+    //   Mavi takım:  Aynı grup 1 (2 kişi) + Aynı grup 2 (3 kişi) + 1 yalnız
+    //   Kırmızı takım: Aynı grup 3 (2 kişi) + 3 yalnız
+    const MOCK_DATA = {
+      state: "INGAME",
+      mode: "Dereceli",
+      map_name: "Ascent",
+      map_image: "https://media.valorant-api.com/maps/7eaecc1b-4337-bbf6-6ab9-04b8f06b3319/splash.png",
+      server: "Istanbul",
+      puuid: "self-0001",
+      players: {
+        "self-0001": { puuid:"self-0001", name:"SenKendin#TR1", team:"Blue", partyNumber:1, agent:"Jett",   rank:21, peakRank:24, peakRankAct:"(e8a2)", peakRR:120, rr:54, kd:1.34, headshotPercentage:28, level:215, playerCard:"9fb348bc-41a0-91ad-8a3e-818035c4e561" },
+        "p-0002":    { puuid:"p-0002",    name:"DuoArkadas#TR1", team:"Blue", partyNumber:1, agent:"Omen",  rank:20, peakRank:22, peakRankAct:"(e7a3)", peakRR:60,  rr:33, kd:1.05, headshotPercentage:22, level:140 },
+        "p-0003":    { puuid:"p-0003",    name:"Trio_Bir#EUW",  team:"Blue", partyNumber:2, agent:"Sage",  rank:18, peakRank:19, peakRankAct:"(e7a1)", peakRR:40,  rr:71, kd:0.92, headshotPercentage:18, level:88 },
+        "p-0004":    { puuid:"p-0004",    name:"Trio_Iki#EUW",  team:"Blue", partyNumber:2, agent:"Killjoy",rank:17, peakRank:18, peakRankAct:"(e6a2)", peakRR:30,  rr:12, kd:1.12, headshotPercentage:25, level:102 },
+        "p-0005":    { puuid:"p-0005",    name:"Trio_Uc#EUW",   team:"Blue", partyNumber:2, agent:"Sova",  rank:19, peakRank:20, peakRankAct:"(e7a2)", peakRR:50,  rr:88, kd:1.41, headshotPercentage:31, level:160 },
+        "p-0006":    { puuid:"p-0006",    name:"Yalniz#TR1",    team:"Blue", partyNumber:0, agent:"Cypher",rank:16, peakRank:18, peakRankAct:"(e6a3)", peakRR:20,  rr:5,  kd:0.78, headshotPercentage:14, level:45 },
+
+        "e-0007":    { puuid:"e-0007",    name:"Rakip_Duo1#NA1", team:"Red", partyNumber:3, agent:"Reyna",  rank:22, peakRank:25, peakRankAct:"(e8a1)", peakRR:200, rr:41, kd:1.55, headshotPercentage:34, level:312 },
+        "e-0008":    { puuid:"e-0008",    name:"Rakip_Duo2#NA1", team:"Red", partyNumber:3, agent:"Phoenix",rank:21, peakRank:23, peakRankAct:"(e7a3)", peakRR:90,  rr:67, kd:1.18, headshotPercentage:26, level:198 },
+        "e-0009":    { puuid:"e-0009",    name:"GizliOyuncu#???",team:"Red", partyNumber:0, agent:"Raze",   rank:20, peakRank:21, peakRankAct:"(e7a2)", peakRR:55,  rr:23, kd:"Gizli", headshotPercentage:"Gizli", level:77 },
+        "e-0010":    { puuid:"e-0010",    name:"SoloRakip#TR1",  team:"Red", partyNumber:0, agent:"Breach", rank:19, peakRank:20, peakRankAct:"(e7a1)", peakRR:45,  rr:90, kd:0.88, headshotPercentage:19, level:130 },
+        "e-0011":    { puuid:"e-0011",    name:"BirBaska#EUW",   team:"Red", partyNumber:0, agent:"Astra",  rank:18, peakRank:19, peakRankAct:"(e6a3)", peakRR:35,  rr:48, kd:1.02, headshotPercentage:21, level:64 },
+      }
+    };
+
+    const _origFetch = window.fetch.bind(window);
+    window.fetch = function (url, opts) {
+      const u = String(url);
+      if (u.indexOf("/data") === 0 || u === "/data") {
+        return Promise.resolve(new Response(JSON.stringify(MOCK_DATA), { headers: { "Content-Type": "application/json" } }));
+      }
+      if (u.indexOf("/info") === 0) {
+        return Promise.resolve(new Response(JSON.stringify({}), { headers: { "Content-Type": "application/json" } }));
+      }
+      if (u.indexOf("/lang") === 0 || u.indexOf("/quit") === 0) {
+        return Promise.resolve(new Response("ok"));
+      }
+      return _origFetch(url, opts);
+    };
+  </script>
+  <script src="app.js?v=11"></script>
+</body>
+</html>

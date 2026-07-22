@@ -1,0 +1,30 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Build / dist
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Editor / tooling
+.claude/
+.vscode/
+.idea/
+
+# Claude Code project instructions (local only)
+CLAUDE.md
+
+# Runtime / local config
+logs/
+*.log
+
+# OS
+Thumbs.db
+.DS_Store

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decloak — Test Paneli (Grup Göstergesi)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=13" />
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">VALORANT</span><span class="brand-accent">DECLOAK</span>
+    </div>
+    <div class="topbar-right">
+      <div class="status-pill">
+        <span id="status-dot" class="dot live"></span>
+        <span id="status-text">Oyunda · Dereceli</span>
+      </div>
+      <button id="quit-btn" class="quit" title="Kapat">✕</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="hero" class="hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-frame" aria-hidden="true"></div>
+      <div class="hero-content">
+        <span id="state-badge" class="state-badge">Oyunda</span>
+        <h1 id="map-name" class="map-name">TEST PANELİ — Grup Göstergesi</h1>
+        <div id="mode-name" class="mode-name">Düz çubuk = kesin grup (arkadaşların) • Kesik çubuk = tahmini grup (geçmiş maçlardan)</div>
+      </div>
+    </section>
+
+    <div id="teams" class="teams"></div>
+  </main>
+
+  <footer class="foot">
+    <span class="lan-info">Bu yalnızca bir <b>önizleme</b>dir — sahte verilerle çalışır.</span>
+  </footer>
+  <div id="toast" class="toast"></div>
+
+  <script>
+  "use strict";
+  // Gerçek panelle aynı renk paleti ve kenar-parıltısı mantığı.
+  const PARTY_COLORS = ["#f5c451", "#4c97ed", "#43d17a", "#e0658a", "#b07cf0", "#5ad1cd"];
+  const T = { players: "oyuncu" };
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  let TIERS = {};
+  async function loadTiers() {
+    try {
+      const j = await (await fetch("https://valorant-api.com/v1/competitivetiers")).json();
+      j.data[j.data.length - 1].tiers.forEach((t) => {
+        TIERS[t.tier] = { color: "#" + (t.color ? t.color.slice(0, 6) : "8a909c"), icon: t.smallIcon };
+      });
+    } catch (e) {}
+  }
+  const RANKS = ["Unranked","Unranked","Unranked","Demir 1","Demir 2","Demir 3","Bronz 1","Bronz 2","Bronz 3","Gümüş 1","Gümüş 2","Gümüş 3","Altın 1","Altın 2","Altın 3","Platin 1","Platin 2","Platin 3","Elmas 1","Elmas 2","Elmas 3","Yücelik 1","Yücelik 2","Yücelik 3","Immortal 1","Immortal 2","Immortal 3","Radyant"];
+  function rankInfo(idx){ const t=TIERS[idx]; return { name: RANKS[idx]||"?", color: t?t.color:"#8a909c", icon: t?t.icon:null }; }
+  function splitName(full){ if(!full) return {name:"?",tag:""}; const i=full.lastIndexOf("#"); return i<0?{name:full,tag:""}:{name:full.slice(0,i),tag:full.slice(i)}; }
+  function chip(value,label,cls){ if(value==null||value==="") return ""; return `<div class="chip"><span class="v ${cls||""}">${esc(value)}</span><span class="l">${esc(label)}</span></div>`; }
+
+  function partyColor(p){ const n=parseInt(p.partyNumber,10); return (!n||n<=0)?null:PARTY_COLORS[(n-1)%PARTY_COLORS.length]; }
+  function predictedColor(p){ const n=parseInt(p.predictedParty,10); return (!n||n<=0)?null:PARTY_COLORS[(n-1)%PARTY_COLORS.length]; }
+
+  const VLOGO = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Cpolygon points='150,30 270,270 210,270 150,115 90,270 30,270' fill='%23FF4655'/%3E%3C/svg%3E";
+  function playerRowHTML(p,isSelf){
+    const pc = partyColor(p);
+    const pp = pc ? null : predictedColor(p);
+    const edgeColor = pc || pp;
+    const edgeClass = isSelf ? "" : (pc ? " party" : pp ? " party-pred" : "");
+    const ri = rankInfo(p.rank||0);
+    const {name,tag} = splitName(p.name);
+    const rankImg = ri.icon?`<img src="${ri.icon}" alt="">`:"";
+    const rrHtml = (p.rr===0||p.rr)?`<span class="rr">${parseInt(p.rr,10)} RR</span>`:"";
+    const kdNum = parseFloat(p.kd);
+    const kdCls = isNaN(kdNum)?"":(kdNum>=1?"good":"bad");
+    return `
+    <div class="player${isSelf?" self":""}${edgeClass}"${edgeColor&&!isSelf?` style="--pc:${edgeColor}"`:""}>
+      <div class="avatar"><img src="${VLOGO}" alt=""></div>
+      <div class="pmain">
+        <div class="nmeta"><span class="nick">${esc(name)}</span><span class="tag">${esc(tag)}</span></div>
+        <div class="rankline">
+          <span class="rank-badge" style="color:${ri.color}">${rankImg}${esc(ri.name)}</span>
+          ${rrHtml}
+        </div>
+      </div>
+      <div class="stats">
+        ${chip(p.kd,"K/D",kdCls)}${chip(p.headshotPercentage!=null?p.headshotPercentage+"%":null,"HS")}${chip(p.level,"level")}
+      </div>
+      <div class="acts">
+        <a href="#" onclick="return false" title="Tracker">TRK</a>
+        <a href="#" onclick="return false" title="VTL">VTL</a>
+        <button type="button" class="skins-btn" title="Skinler">Skinler</button>
+      </div>
+    </div>`;
+  }
+  function teamCardHTML(title,cls,players,selfId){
+    const rows = players.map((p)=>playerRowHTML(p,p.id===selfId)).join("");
+    return `<div class="team-card ${cls}">
+      <div class="team-head"><span class="team-title">${esc(title)}</span><span class="team-count">${players.length} ${esc(T.players)}</span></div>
+      ${rows}
+    </div>`;
+  }
+
+  // --- SAHTE VERİ ---
+  // partyNumber  : presence ile KESİN tespit (yalnızca sen + arkadaşların) -> düz çubuk
+  // predictedParty: geçmiş maç birlikteliğinden TAHMİN -> kesik çubuk
+  const SELF = "p1";
+  const teamA = [
+    { id:"p1", name:"sen#TR1",        rank:20, rr:42, kd:"1.34", headshotPercentage:28, level:212, partyNumber:1, predictedParty:0 },
+    { id:"p2", name:"Gizli (3a9f)",   rank:21, rr:8,  kd:"1.02", headshotPercentage:22, level:98,  partyNumber:1, predictedParty:0 },
+    { id:"p3", name:"AceMachine#EUW", rank:19, rr:77, kd:"0.88", headshotPercentage:19, level:340, partyNumber:0, predictedParty:0 },
+    { id:"p4", name:"Tahmin_A#x1",    rank:18, rr:55, kd:"1.10", headshotPercentage:24, level:155, partyNumber:0, predictedParty:1 },
+    { id:"p5", name:"Tahmin_A#x2",    rank:18, rr:51, kd:"0.95", headshotPercentage:18, level:160, partyNumber:0, predictedParty:1 },
+  ];
+  const teamB = [
+    { id:"e1", name:"Tahmin_B#tr",    rank:20, rr:31, kd:"1.21", headshotPercentage:26, level:201, partyNumber:0, predictedParty:2 },
+    { id:"e2", name:"Gizli (b71c)",   rank:21, rr:14, kd:"1.45", headshotPercentage:31, level:120, partyNumber:0, predictedParty:2 },
+    { id:"e3", name:"SoloGamer#9090", rank:19, rr:63, kd:"0.79", headshotPercentage:15, level:88,  partyNumber:0, predictedParty:0 },
+    { id:"e4", name:"randomguy#abc",  rank:17, rr:40, kd:"1.05", headshotPercentage:21, level:46,  partyNumber:0, predictedParty:0 },
+    { id:"e5", name:"NightOwl#tr",    rank:22, rr:5,  kd:"1.62", headshotPercentage:29, level:415, partyNumber:0, predictedParty:0 },
+  ];
+
+  (async function(){
+    await loadTiers();
+    const teams = document.getElementById("teams");
+    teams.className = "teams";
+    teams.innerHTML =
+      teamCardHTML("Takım A - Savunma","blue",teamA,SELF) +
+      teamCardHTML("Takım B - Atak","red",teamB,SELF);
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valorant Decloak</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=13" />
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">VALORANT</span><span class="brand-accent">DECLOAK</span>
+    </div>
+    <div class="topbar-right">
+      <div class="status-pill">
+        <span id="status-dot" class="dot"></span>
+        <span id="status-text">Bağlanıyor...</span>
+      </div>
+      <button id="quit-btn" class="quit" title="Kapat">✕</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="hero" class="hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-frame" aria-hidden="true"></div>
+      <div class="hero-content">
+        <span id="state-badge" class="state-badge">Yükleniyor</span>
+        <h1 id="map-name" class="map-name">Valorant Decloak</h1>
+        <div id="mode-name" class="mode-name"></div>
+      </div>
+    </section>
+
+    <div id="teams" class="teams">
+      <div class="placeholder">
+        <div class="spinner"></div>
+        <p>Yükleniyor...</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <span id="lan-info" class="lan-info"></span>
+    Valorant Decloak by <a href="https://x.com/tcoyapps" target="_blank" rel="noopener" class="cred">tcoy</a>
+  </footer>
+  <div id="toast" class="toast"></div>
+  <div id="skins-modal" class="skins-modal" aria-hidden="true"></div>
+
+  <div id="lang-switch" class="lang-switch" role="group" aria-label="Language / Dil">
+    <button type="button" class="lang-opt" data-lang="tr">TR</button>
+    <button type="button" class="lang-opt" data-lang="en">EN</button>
+  </div>
+
+  <script src="app.js?v=11"></script>
+</body>
+</html>
