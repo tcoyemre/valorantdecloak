@@ -39,9 +39,6 @@ Clicking "Skins" on a player opens their in-match loadout:
   opens alongside the game, so there's no need to open a separate browser tab.
   Closing the panel window closes the program as well. If pywebview isn't
   available, the panel automatically falls back to your default browser.
-- **Hidden name resolution (decloak)**: Real nicknames of streamer-mode/hidden
-  players are resolved first via the Henrik API, then via vtl.lol as a
-  fallback; if both fail, a `Hidden (xxxxxxxx)` placeholder is shown instead.
 - **Base Turkish interface**: All messages and game modes shown in the panel are in
   Turkish basely but u can change from right bottom.
 - Shows rank, peak rank, RR, headshot percentage, win rate, leaderboard
