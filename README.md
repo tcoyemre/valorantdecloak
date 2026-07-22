@@ -5,8 +5,8 @@
 
 Valorant Decloak shows the names (including hidden/streamer-mode players),
 ranks, peak ranks, and stats of the players in your game in a local web panel
-while VALORANT is open. There is no license/HWID check, the program runs
-entirely locally, and the interface is in Turkish.
+while VALORANT is open. The program runs
+entirely locally, and the interface is in TR/EN.
 
 ---
 
