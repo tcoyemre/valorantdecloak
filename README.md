@@ -41,11 +41,9 @@ Clicking "Skins" on a player opens their in-match loadout:
   available, the panel automatically falls back to your default browser.
 - **Hidden name resolution (decloak)**: Real nicknames of streamer-mode/hidden
   players are resolved first via the Henrik API, then via vtl.lol as a
-  fallback; if both fail, a `Gizli (xxxxxxxx)` placeholder is shown instead.
-- **No license/HWID check**: The program runs entirely locally without
-  connecting to any license server.
-- **Turkish interface**: All messages and game modes shown in the panel are in
-  Turkish.
+  fallback; if both fail, a `Hidden (xxxxxxxx)` placeholder is shown instead.
+- **Base Turkish interface**: All messages and game modes shown in the panel are in
+  Turkish basely but u can change from right bottom.
 - Shows rank, peak rank, RR, headshot percentage, win rate, leaderboard
   position, account level, current skin, and Discord Rich Presence, among
   other stats.
